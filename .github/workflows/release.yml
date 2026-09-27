@@ -1,0 +1,249 @@
+name: SoulSign Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version, for example 1.2.1"
+        required: true
+        default: "1.2.1"
+        type: string
+      tag:
+        description: "Release tag. Leave empty to use v<version>"
+        required: false
+        default: ""
+        type: string
+      prerelease:
+        description: "Mark this release as pre-release"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: soulsign-manual-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ inputs.version }}
+      REQUESTED_TAG: ${{ inputs.tag }}
+      IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+      RUST_TOOLCHAIN: "1.97.1"
+      SOURCE_PACKAGES_DIR: build/SourcePackages
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6.0.2
+
+      - name: Resolve release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "$REQUESTED_TAG" ]]; then
+            TAG="$REQUESTED_TAG"
+          else
+            TAG="v$VERSION"
+          fi
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "Release tag: $TAG"
+
+      - name: Set SoulSign version for this build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path
+          path = Path("project.yml")
+          text = path.read_text(encoding="utf-8")
+          version = os.environ["VERSION"]
+          build = os.environ["GITHUB_RUN_NUMBER"]
+          text = re.sub(r"MARKETING_VERSION: [^\n]+", f"MARKETING_VERSION: {version}", text)
+          text = re.sub(r"CURRENT_PROJECT_VERSION: [^\n]+", f"CURRENT_PROJECT_VERSION: {build}", text)
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Select Xcode 26.5
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d /Applications/Xcode_26.5.app
+          sudo xcode-select --switch /Applications/Xcode_26.5.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Install pinned XcodeGen
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error \
+            --output "$RUNNER_TEMP/xcodegen.zip" \
+            https://github.com/yonaskolb/XcodeGen/releases/download/2.45.4/xcodegen.zip
+          echo "090ec29491aad50aec10631bf6e62253fed733c50f3aab0f5ffc86bc170bdbef  $RUNNER_TEMP/xcodegen.zip" | shasum -a 256 --check
+          ditto -x -k "$RUNNER_TEMP/xcodegen.zip" "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/xcodegen/bin/xcodegen" --version
+
+      - name: Audit iOS 15 source compatibility
+        shell: bash
+        run: bash Scripts/audit-ios15-compat.sh
+
+      # The vendored RustBridge in the upstream repository targets iOS 16.
+      # Rebuilding it for iOS 15 costs ~9 minutes. Restore/save the rebuilt
+      # xcframework immediately so a later Swift compile failure does not throw
+      # that expensive work away.
+      - name: Restore iOS 15 RustBridge cache
+        id: rustbridge-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            Vendor/Minimuxer/RustBridge/lib/RustBridge.xcframework
+            Vendor/Minimuxer/RustBridge/target
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: soulsign-rustbridge-ios15-${{ runner.arch }}-${{ hashFiles('Vendor/Minimuxer/RustBridge/Cargo.lock', 'Vendor/Minimuxer/RustBridge/src/**', 'Vendor/Minimuxer/RustBridge/Makefile') }}
+
+      - name: Ensure RustBridge supports iOS 15
+        id: rustbridge
+        shell: bash
+        env:
+          IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+        run: |
+          set -euo pipefail
+          bash Scripts/ensure-rustbridge.sh
+          MAX_IOS_VERSION=15.0 bash Scripts/verify-rustbridge-minos.sh
+          bash Scripts/verify-rustbridge-symbols.sh
+
+      - name: Save iOS 15 RustBridge cache
+        if: steps.rustbridge-cache.outputs.cache-hit != 'true' && steps.rustbridge.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            Vendor/Minimuxer/RustBridge/lib/RustBridge.xcframework
+            Vendor/Minimuxer/RustBridge/target
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: soulsign-rustbridge-ios15-${{ runner.arch }}-${{ hashFiles('Vendor/Minimuxer/RustBridge/Cargo.lock', 'Vendor/Minimuxer/RustBridge/src/**', 'Vendor/Minimuxer/RustBridge/Makefile') }}
+
+      - name: Generate Xcode project
+        shell: bash
+        run: xcodegen generate
+
+      - name: Verify Xcode deployment targets are iOS 15
+        shell: bash
+        run: |
+          set -euo pipefail
+          for target in Seal SealTunnel DeviceSupport; do
+            value="$(xcodebuild \
+              -project SoulSign.xcodeproj \
+              -target "$target" \
+              -configuration Release \
+              -sdk iphoneos \
+              -showBuildSettings | awk -F ' = ' '/^[[:space:]]*IPHONEOS_DEPLOYMENT_TARGET = / { print $2; exit }')"
+            echo "$target IPHONEOS_DEPLOYMENT_TARGET=$value"
+            test "$value" = "15.0"
+          done
+
+      - name: Restore Swift package cache
+        id: spm-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: build/SourcePackages
+          key: soulsign-spm-${{ runner.os }}-${{ hashFiles('project.yml', 'Vendor/Minimuxer/Package.swift', 'Vendor/rork-sign/Package.swift') }}
+
+      - name: Resolve Swift packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$SOURCE_PACKAGES_DIR"
+          xcodebuild -resolvePackageDependencies \
+            -project SoulSign.xcodeproj \
+            -scheme Seal \
+            -clonedSourcePackagesDirPath "$SOURCE_PACKAGES_DIR"
+
+      - name: Save Swift package cache
+        if: steps.spm-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: build/SourcePackages
+          key: soulsign-spm-${{ runner.os }}-${{ hashFiles('project.yml', 'Vendor/Minimuxer/Package.swift', 'Vendor/rork-sign/Package.swift') }}
+
+      - name: Build unsigned SoulSign IPA
+        shell: bash
+        env:
+          SEAL_IPA_CONFIGURATION: Release
+          SEAL_SKIP_XCODEGEN: "1"
+          SEAL_SOURCE_PACKAGES_DIR: ${{ env.SOURCE_PACKAGES_DIR }}
+          IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+        run: bash Scripts/build-unsigned-ipa.sh
+
+      - name: Verify unsigned SoulSign IPA
+        shell: bash
+        run: bash Scripts/verify-ipa.sh build/SoulSign.ipa
+
+      - name: Create source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_DIR="$RUNNER_TEMP/SoulSign-source-${VERSION}"
+          SOURCE_ZIP="$PWD/build/SoulSign-source-${VERSION}.zip"
+          rm -rf "$SOURCE_DIR" "$SOURCE_ZIP" "$SOURCE_ZIP.sha256"
+          mkdir -p "$SOURCE_DIR"
+          rsync -a --exclude '.git' --exclude 'build' ./ "$SOURCE_DIR/"
+          ditto -c -k --sequesterRsrc --keepParent "$SOURCE_DIR" "$SOURCE_ZIP"
+          shasum -a 256 "$SOURCE_ZIP" > "$SOURCE_ZIP.sha256"
+
+      - name: Create or update GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; replacing assets."
+          else
+            args=(release create "$TAG" --title "SoulSign $VERSION" --generate-notes --target "$GITHUB_SHA")
+            if [[ "$PRERELEASE" == "true" ]]; then
+              args+=(--prerelease)
+            fi
+            gh "${args[@]}"
+          fi
+
+          gh release upload "$TAG" \
+            build/SoulSign.ipa \
+            build/SoulSign.ipa.sha256 \
+            build/SoulSign-Info.plist \
+            build/SealTunnel-Info.plist \
+            "build/SoulSign-source-${VERSION}.zip" \
+            "build/SoulSign-source-${VERSION}.zip.sha256" \
+            --clobber
+
+      - name: Upload workflow artifact backup
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: SoulSign-${{ env.TAG }}
+          if-no-files-found: error
+          path: |
+            build/SoulSign.ipa
+            build/SoulSign.ipa.sha256
+            build/SoulSign-Info.plist
+            build/SealTunnel-Info.plist
+            build/xcodebuild.log
+            build/SoulSign-source-${{ inputs.version }}.zip
+            build/SoulSign-source-${{ inputs.version }}.zip.sha256
+          retention-days: 30
+
+      - name: Upload Xcode log on failure
+        if: failure()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: SoulSign-xcodebuild-log-${{ github.run_number }}
+          if-no-files-found: ignore
+          path: build/xcodebuild.log
+          retention-days: 7
