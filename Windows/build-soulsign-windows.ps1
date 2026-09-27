@@ -71,6 +71,7 @@ Get-ChildItem (Join-Path $WorkDir "src\iPASide.Flutter\lib") -Recurse -File -Fil
         $text = [System.IO.File]::ReadAllText($_.FullName)
         $updated = $text.Replace("iPASide", "SoulSign")
         $updated = $updated.Replace("src\SoulSign.Engine", "src\iPASide.Engine")
+        $updated = $updated.Replace("'SoulSign.Engine'", "'iPASide.Engine'")
         [System.IO.File]::WriteAllText($_.FullName, $updated, (New-Object System.Text.UTF8Encoding($false)))
     }
 
