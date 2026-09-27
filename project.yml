@@ -99,7 +99,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mjorb.soulsign
         PRODUCT_NAME: SoulSign
-        MARKETING_VERSION: 1.1.0
+        MARKETING_VERSION: 1.3.0
         CURRENT_PROJECT_VERSION: 4
         GENERATE_INFOPLIST_FILE: NO
         CODE_SIGN_STYLE: Automatic
@@ -129,7 +129,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mjorb.soulsign.TunnelProv
         PRODUCT_NAME: SealTunnel
-        MARKETING_VERSION: 1.1.0
+        MARKETING_VERSION: 1.3.0
         CURRENT_PROJECT_VERSION: 4
         GENERATE_INFOPLIST_FILE: NO
         CODE_SIGN_STYLE: Automatic
