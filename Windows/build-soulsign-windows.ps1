@@ -134,7 +134,17 @@ Write-Host "== Building SoulSign PC =="
 
 $Zsign = Join-Path $WorkDir "src\iPASide.Engine\ipaside_engine\vendor\zsign.exe"
 if (-not (Test-Path $Zsign)) {
-    throw "zsign.exe is missing. Build it before running this script."
+    Write-Host "== Building zsign for SoulSign PC =="
+    $Bash = "C:\msys64\usr\bin\bash.exe"
+    if (-not (Test-Path $Bash)) {
+        throw "MSYS2 bash was not found at $Bash"
+    }
+    $WorkDirForBash = (& $Bash -lc "cygpath -u '$WorkDir'").Trim()
+    $env:MSYSTEM = "MINGW64"
+    & $Bash -lc "cd '$WorkDirForBash' && bash tools/zsign/build-zsign.sh"
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Zsign)) {
+        throw "zsign build failed ($LASTEXITCODE)"
+    }
 }
 
 Push-Location $WorkDir
