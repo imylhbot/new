@@ -97,8 +97,12 @@ jobs:
         shell: bash
         env:
           IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+          RUSTUP_TOOLCHAIN: ${{ env.RUST_TOOLCHAIN }}
         run: |
           set -euo pipefail
+          # A cache hit skips the rebuild path that used to install llvm-tools.
+          # Install the matching inspector even when the XCFramework is reused.
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --component llvm-tools-preview
           bash Scripts/ensure-rustbridge.sh
           MAX_IOS_VERSION=15.0 bash Scripts/verify-rustbridge-minos.sh
           bash Scripts/verify-rustbridge-symbols.sh
