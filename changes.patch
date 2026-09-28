@@ -1,167 +1,73 @@
-diff --git a/Seal/Features/Settings/SettingsViewModel.swift b/Seal/Features/Settings/SettingsViewModel.swift
-index a9dc94a..4a32445 100644
---- a/Seal/Features/Settings/SettingsViewModel.swift
-+++ b/Seal/Features/Settings/SettingsViewModel.swift
-@@ -1180,9 +1180,9 @@ final class SettingsViewModel: ObservableObject {
-             let failure = AppleServiceFailurePolicy.isNetworkError(error)
-                 ? AppleServiceFailurePolicy.networkFailure(underlying: error)
-                 : Self.failure(
--                    title: "无法添加账号",
--                    reason: "Apple ID 验证失败",
--                    recovery: "重试",
-+                    title: "账号添加未完成",
-+                    reason: "登录流程返回了未分类错误（\(LogPrivacyRedactor.redact((error as NSError).domain)) / \((error as NSError).code)）。请查看运行日志；不能仅据此认定密码错误。",
-+                    recovery: "记录错误码后重试",
-                     code: "SEAL-AUTH-102"
-                 )
-             alertFailure = failure
-@@ -1235,6 +1235,30 @@ final class SettingsViewModel: ObservableObject {
-         _ authenticated: AuthenticatedAppleAccount,
-         team: AppleTeamRecord,
-         replacing existingAccount: AppleAccountRecord?
-+    ) async throws -> Bool {
-+        do {
-+            return try await persistAuthenticatedAccountUnchecked(
-+                authenticated, team: team, replacing: existingAccount
-+            )
-+        } catch is CancellationError {
-+            throw CancellationError()
-+        } catch let failure as ImportFailure {
-+            throw failure
-+        } catch {
-+            let underlying = error as NSError
-+            throw Self.failure(
-+                title: "Apple 已认证，账号保存失败",
-+                reason: "Apple 已返回账号与开发团队，但保存本机钥匙串或账号记录失败（\(LogPrivacyRedactor.redact(underlying.domain)) / \(underlying.code)）。",
-+                recovery: "保留错误码并检查安装包签名和钥匙串权限后重试",
-+                code: "SEAL-AUTH-STORE-001"
-+            )
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 0e760f1..1c49830 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -97,8 +97,12 @@ jobs:
+         shell: bash
+         env:
+           IPHONEOS_DEPLOYMENT_TARGET: "15.0"
++          RUSTUP_TOOLCHAIN: ${{ env.RUST_TOOLCHAIN }}
+         run: |
+           set -euo pipefail
++          # A cache hit skips the rebuild path that used to install llvm-tools.
++          # Install the matching inspector even when the XCFramework is reused.
++          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --component llvm-tools-preview
+           bash Scripts/ensure-rustbridge.sh
+           MAX_IOS_VERSION=15.0 bash Scripts/verify-rustbridge-minos.sh
+           bash Scripts/verify-rustbridge-symbols.sh
+diff --git a/Scripts/verify-rustbridge-minos.sh b/Scripts/verify-rustbridge-minos.sh
+index 77d0943..bdc109a 100644
+--- a/Scripts/verify-rustbridge-minos.sh
++++ b/Scripts/verify-rustbridge-minos.sh
+@@ -16,6 +16,9 @@ if [[ ! -d "$FRAMEWORK_PATH" ]]; then
+   echo "RustBridge XCFramework not found: $FRAMEWORK_PATH" >&2
+   exit 2
+ fi
++# Resolve once against the caller's current directory, before entering scratch.
++# OLDPWD is optional and may refer to an unrelated directory in a CI shell.
++FRAMEWORK_PATH="$(cd "$FRAMEWORK_PATH" && pwd -P)"
+ 
+ version_gt() {
+   python3 - "$1" "$2" <<'PY'
+@@ -63,13 +66,7 @@ while IFS= read -r archive; do
+ 
+   slice_dir="$work/$slice"
+   mkdir -p "$slice_dir"
+-  # 兼容调用方传入绝对路径或相对路径：绝对路径直接使用，相对路径基于进入
+-  # slice_dir 之前的工作目录(OLDPWD)解析，避免拼出 "$OLDPWD/绝对路径" 的重复前缀。
+-  case "$archive" in
+-    /*) archive_path="$archive" ;;
+-    *)  archive_path="$OLDPWD/$archive" ;;
+-  esac
+-  (cd "$slice_dir" && ar -x "$archive_path")
++  (cd "$slice_dir" && ar -x "$archive")
+ 
+   slice_checked=0
+   slice_annotated=0
+diff --git a/Windows/build-soulsign-windows.ps1 b/Windows/build-soulsign-windows.ps1
+index 9f4780f..12c29fc 100644
+--- a/Windows/build-soulsign-windows.ps1
++++ b/Windows/build-soulsign-windows.ps1
+@@ -139,11 +139,18 @@ if (-not (Test-Path $Zsign)) {
+     if (-not (Test-Path $Bash)) {
+         throw "MSYS2 bash was not found at $Bash"
+     }
+-    $WorkDirForBash = (& $Bash -lc "cygpath -u '$WorkDir'").Trim()
+     $env:MSYSTEM = "MINGW64"
+-    & $Bash -lc "cd '$WorkDirForBash' && bash tools/zsign/build-zsign.sh"
+-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Zsign)) {
+-        throw "zsign build failed ($LASTEXITCODE)"
++    # Inherit the working directory directly. Never parse a login shell's stdout
++    # as a path: first-run MSYS2 profile messages can precede cygpath's output.
++    Push-Location -LiteralPath $WorkDir
++    try {
++        & $Bash --noprofile --norc ./tools/zsign/build-zsign.sh
++        if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Zsign)) {
++            throw "zsign build failed ($LASTEXITCODE)"
 +        }
 +    }
-+
-+    private func persistAuthenticatedAccountUnchecked(
-+        _ authenticated: AuthenticatedAppleAccount,
-+        team: AppleTeamRecord,
-+        replacing existingAccount: AppleAccountRecord?
-     ) async throws -> Bool {
-         guard let accountRepository, let keychain else { return false }
-         let storedAccounts = try await accountRepository.fetchAll()
-diff --git a/Seal/Infrastructure/Accounts/AnisetteClient.swift b/Seal/Infrastructure/Accounts/AnisetteClient.swift
-index e8aaa79..1b6378f 100644
---- a/Seal/Infrastructure/Accounts/AnisetteClient.swift
-+++ b/Seal/Infrastructure/Accounts/AnisetteClient.swift
-@@ -220,6 +220,8 @@ struct AnisetteV3Client: AnisetteEnvironmentManaging {
-             }
-             UserDefaults.standard.set(true, forKey: Self.localSucceededKey)
-             return data
-+        } catch is CancellationError {
-+            throw CancellationError()
-         } catch {
-             Self.logger.error("认证时本地 Anisette 生成失败，拒绝降级远程以避免 machineID 漂移：\(String(describing: error), privacy: .public)")
-             throw AnisetteV3Error.localGenerationFailed(error.localizedDescription)
-diff --git a/Seal/Infrastructure/Accounts/AppleAccountClient.swift b/Seal/Infrastructure/Accounts/AppleAccountClient.swift
-index 5ee1fa7..4a54e6d 100644
---- a/Seal/Infrastructure/Accounts/AppleAccountClient.swift
-+++ b/Seal/Infrastructure/Accounts/AppleAccountClient.swift
-@@ -28,7 +28,7 @@ enum AppleAuthenticationFailure {
-             if let underlying = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
-                 parts.append("嵌套：\(underlying.domain)/\(underlying.code) \(underlying.localizedDescription)")
-             }
--            let detail = parts.joined(separator: "\n")
-+            let detail = LogPrivacyRedactor.redact(parts.joined(separator: "\n"))
-             return ImportFailure(
-                 title: "无法添加账号",
-                 reason: "Apple ID 验证失败。\n\(detail)",
-@@ -75,20 +75,6 @@ final class AppleAccountClient {
-         }
++    finally {
++        Pop-Location
      }
+ }
  
--    /// 判断认证错误是否值得"清本地指纹、换远程 Anisette"后自动重试一次。
--    /// 覆盖：Apple 判 anisette 无效、认证端点返回 HTML 导致 plist 解析失败(NSCocoa 3840)、坏服务器响应。
--    private nonisolated static func shouldRetryWithRemoteAnisette(_ error: Error) -> Bool {
--        if case ALTAppleAPIError.invalidAnisetteData = error { return true }
--        let ns = error as NSError
--        if ns.domain == NSCocoaErrorDomain, ns.code == 3840 { return true }
--        if let urlError = error as? URLError, urlError.code == .badServerResponse { return true }
--        // AltSign invalidResponse（Apple 返回 503/HTML 等非 plist 响应）也换远程 Anisette 重试
--        if ns.domain == "AltSign.ALTServerError", ns.code == 1 { return true }
--        if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? NSError,
--           underlying.domain == NSCocoaErrorDomain, underlying.code == 3840 { return true }
--        return false
--    }
--
-     /// 给异步操作加超时，超时后抛出超时错误。
-     /// 认证可能卡在无法协作取消的调用里（本地 ADI 模拟、AltSign 内部回调），
-     /// 因此必须用可遗弃竞速：超时先到就抛错，未完成的认证在后台自行结束后被丢弃。
-@@ -205,15 +191,15 @@ final class AppleAccountClient {
-                 code: "SEAL-AUTH-102a"
-             )
-         } catch ALTAppleAPIError.invalidAnisetteData {
--            throw ALTAppleAPIError(.invalidAnisetteData)
-+            throw ImportFailure(
-+                title: "Apple 设备环境验证失败",
-+                reason: "Apple 拒绝了本次 Anisette 设备环境数据。账号尚未完成登录；这不是 USB 配对文件验证失败。",
-+                recovery: "核对系统时间和网络后重试，并查看运行日志中的错误码",
-+                code: "SEAL-AUTH-107i"
-+            )
-         } catch let failure as ImportFailure {
-             throw failure
-         } catch {
--            // 认证端点返回 HTML/空响应导致 plist 解析失败(3840)、或坏服务器响应：
--            // 这类错误可通过清除本地指纹、换远程 Anisette 通道恢复，原样上抛交给 authenticate 自动重试一次
--            if Self.shouldRetryWithRemoteAnisette(error) {
--                throw error
--            }
-             // Apple 拒绝认证握手，通常与 Anisette 设备环境数据无效有关，
-             // 而不是用户网络问题，必须与“验证失败/网络”区分开。
-             if let apiError = error as? ALTAppleAPIError,
-@@ -496,7 +482,7 @@ final class AppleAccountClient {
-             }
-             return ImportFailure(
-                 title: "无法获取设备环境",
--                reason: detail.isEmpty ? "Anisette 服务暂时不可用" : detail,
-+                reason: detail.isEmpty ? "Anisette 服务暂时不可用" : LogPrivacyRedactor.redact(detail),
-                 recovery: "重试",
-                 code: code
-             )
-@@ -521,7 +507,7 @@ final class AppleAccountClient {
-         if let underlying = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
-             detailParts.append("嵌套：\(underlying.domain)/\(underlying.code) \(underlying.localizedDescription)")
-         }
--        let detail = detailParts.joined(separator: "\n")
-+        let detail = LogPrivacyRedactor.redact(detailParts.joined(separator: "\n"))
-         let baseReason = isVerificationFailure ? "验证码无效" : "Apple ID 验证失败"
-         return ImportFailure(
-             title: "无法添加账号",
-diff --git a/SealTests/Accounts/AppleAccountClientTests.swift b/SealTests/Accounts/AppleAccountClientTests.swift
-index 0e1e4b1..75fa3cc 100644
---- a/SealTests/Accounts/AppleAccountClientTests.swift
-+++ b/SealTests/Accounts/AppleAccountClientTests.swift
-@@ -3,6 +3,18 @@ import Testing
- @testable import Seal
- 
- struct AppleAccountClientTests {
-+    @Test
-+    func signInFailurePreservesErrorCodeButRedactsEmail() {
-+        let error = NSError(
-+            domain: "com.apple.authentication", code: 3840,
-+            userInfo: [NSLocalizedDescriptionKey: "account@example.com invalid response"]
-+        )
-+        let failure = AppleAuthenticationFailure.make(stage: .signIn, error: error)
-+        #expect(failure.code == "SEAL-AUTH-107a")
-+        #expect(failure.reason.contains("3840"))
-+        #expect(failure.reason.contains("account@example.com") == false)
-+    }
-+
-     @Test
-     func masksEmailWithoutPersistingTheFullAddress() {
-         #expect(AppleAccountClient.mask("seal.user@icloud.com") == "sea***er@icloud.com")
-@@ -26,7 +38,7 @@ struct AppleAccountClientTests {
-             error: error
-         )
- 
--        #expect(failure.code == "SEAL-AUTH-105")
-+        #expect(failure.code == "SEAL-AUTH-105f")
-         #expect(failure.reason.contains("-20101") == false)
-         #expect(failure.reason.contains("Developer services are unavailable") == false)
-         #expect(failure.reason.contains("开发团队"))

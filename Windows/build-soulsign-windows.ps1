@@ -139,11 +139,18 @@ if (-not (Test-Path $Zsign)) {
     if (-not (Test-Path $Bash)) {
         throw "MSYS2 bash was not found at $Bash"
     }
-    $WorkDirForBash = (& $Bash -lc "cygpath -u '$WorkDir'").Trim()
     $env:MSYSTEM = "MINGW64"
-    & $Bash -lc "cd '$WorkDirForBash' && bash tools/zsign/build-zsign.sh"
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Zsign)) {
-        throw "zsign build failed ($LASTEXITCODE)"
+    # Inherit the working directory directly. Never parse a login shell's stdout
+    # as a path: first-run MSYS2 profile messages can precede cygpath's output.
+    Push-Location -LiteralPath $WorkDir
+    try {
+        & $Bash --noprofile --norc ./tools/zsign/build-zsign.sh
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path $Zsign)) {
+            throw "zsign build failed ($LASTEXITCODE)"
+        }
+    }
+    finally {
+        Pop-Location
     }
 }
 

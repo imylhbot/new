@@ -16,6 +16,9 @@ if [[ ! -d "$FRAMEWORK_PATH" ]]; then
   echo "RustBridge XCFramework not found: $FRAMEWORK_PATH" >&2
   exit 2
 fi
+# Resolve once against the caller's current directory, before entering scratch.
+# OLDPWD is optional and may refer to an unrelated directory in a CI shell.
+FRAMEWORK_PATH="$(cd "$FRAMEWORK_PATH" && pwd -P)"
 
 version_gt() {
   python3 - "$1" "$2" <<'PY'
@@ -63,13 +66,7 @@ while IFS= read -r archive; do
 
   slice_dir="$work/$slice"
   mkdir -p "$slice_dir"
-  # 兼容调用方传入绝对路径或相对路径：绝对路径直接使用，相对路径基于进入
-  # slice_dir 之前的工作目录(OLDPWD)解析，避免拼出 "$OLDPWD/绝对路径" 的重复前缀。
-  case "$archive" in
-    /*) archive_path="$archive" ;;
-    *)  archive_path="$OLDPWD/$archive" ;;
-  esac
-  (cd "$slice_dir" && ar -x "$archive_path")
+  (cd "$slice_dir" && ar -x "$archive")
 
   slice_checked=0
   slice_annotated=0
