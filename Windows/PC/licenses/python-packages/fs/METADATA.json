@@ -1,0 +1,14 @@
+{
+  "name": "fs",
+  "version": "2.4.16",
+  "license": "MIT",
+  "project_urls": [
+    "Bug Reports, https://github.com/PyFilesystem/pyfilesystem2/issues",
+    "Documentation, https://pyfilesystem2.readthedocs.io/en/latest/",
+    "Wiki, https://www.pyfilesystem.org/"
+  ],
+  "home_page": "https://github.com/PyFilesystem/pyfilesystem2",
+  "files": [
+    "fs-2.4.16.dist-info_LICENSE"
+  ]
+}

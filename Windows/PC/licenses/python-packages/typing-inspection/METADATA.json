@@ -1,0 +1,15 @@
+{
+  "name": "typing-inspection",
+  "version": "0.4.4",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/pydantic/typing-inspection",
+    "Documentation, https://pydantic.github.io/typing-inspection/dev/",
+    "Source, https://github.com/pydantic/typing-inspection",
+    "Changelog, https://github.com/pydantic/typing-inspection/blob/main/HISTORY.md"
+  ],
+  "home_page": null,
+  "files": [
+    "typing_inspection-0.4.4.dist-info_licenses_LICENSE"
+  ]
+}

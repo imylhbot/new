@@ -1,0 +1,11 @@
+{
+  "name": "pylzss",
+  "version": "0.3.4",
+  "license": "GNU LGPL v3",
+  "project_urls": [],
+  "home_page": "https://github.com/m1stadev/pylzss",
+  "files": [
+    "pylzss-0.3.4.dist-info_COPYING",
+    "pylzss-0.3.4.dist-info_COPYING.LESSER"
+  ]
+}

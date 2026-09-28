@@ -1,0 +1,10 @@
+{
+  "name": "srptools",
+  "version": "1.0.1",
+  "license": "BSD 3-Clause License",
+  "project_urls": [],
+  "home_page": "https://github.com/idlesign/srptools",
+  "files": [
+    "srptools-1.0.1.dist-info_LICENSE"
+  ]
+}

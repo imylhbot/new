@@ -1,0 +1,16 @@
+{
+  "name": "annotated-doc",
+  "version": "0.0.5",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/fastapi/annotated-doc",
+    "Documentation, https://github.com/fastapi/annotated-doc",
+    "Repository, https://github.com/fastapi/annotated-doc",
+    "Issues, https://github.com/fastapi/annotated-doc/issues",
+    "Changelog, https://github.com/fastapi/annotated-doc/release-notes.md"
+  ],
+  "home_page": null,
+  "files": [
+    "annotated_doc-0.0.5.dist-info_licenses_LICENSE"
+  ]
+}

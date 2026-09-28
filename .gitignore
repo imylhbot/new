@@ -28,3 +28,14 @@ artifacts*.json
 
 # AI dev workspace (forks, temp assets, screenshots)
 .dev-workspace/
+
+.venv/
+portable/
+.upload-work/
+.upload-backups/
+release-ios/
+release-source/
+release-assets/
+Vendor/Minimuxer/RustBridge/target/
+
+Windows/PC/tests/scratch/

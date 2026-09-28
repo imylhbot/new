@@ -1,0 +1,10 @@
+{
+  "name": "shellingham",
+  "version": "1.5.4",
+  "license": "ISC License",
+  "project_urls": [],
+  "home_page": "https://github.com/sarugaku/shellingham",
+  "files": [
+    "shellingham-1.5.4.dist-info_LICENSE"
+  ]
+}

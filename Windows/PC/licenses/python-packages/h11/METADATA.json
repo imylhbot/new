@@ -1,0 +1,10 @@
+{
+  "name": "h11",
+  "version": "0.16.0",
+  "license": "MIT",
+  "project_urls": [],
+  "home_page": "https://github.com/python-hyper/h11",
+  "files": [
+    "h11-0.16.0.dist-info_licenses_LICENSE.txt"
+  ]
+}

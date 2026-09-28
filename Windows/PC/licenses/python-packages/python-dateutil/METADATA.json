@@ -1,0 +1,13 @@
+{
+  "name": "python-dateutil",
+  "version": "2.9.0.post0",
+  "license": "Dual License",
+  "project_urls": [
+    "Documentation, https://dateutil.readthedocs.io/en/stable/",
+    "Source, https://github.com/dateutil/dateutil"
+  ],
+  "home_page": "https://github.com/dateutil/dateutil",
+  "files": [
+    "python_dateutil-2.9.0.post0.dist-info_LICENSE"
+  ]
+}

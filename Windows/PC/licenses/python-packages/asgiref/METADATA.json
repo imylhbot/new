@@ -1,0 +1,14 @@
+{
+  "name": "asgiref",
+  "version": "3.12.1",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Documentation, https://asgi.readthedocs.io/",
+    "Further Documentation, https://docs.djangoproject.com/en/stable/topics/async/#async-adapter-functions",
+    "Changelog, https://github.com/django/asgiref/blob/master/CHANGELOG.txt"
+  ],
+  "home_page": "https://github.com/django/asgiref/",
+  "files": [
+    "asgiref-3.12.1.dist-info_licenses_LICENSE"
+  ]
+}

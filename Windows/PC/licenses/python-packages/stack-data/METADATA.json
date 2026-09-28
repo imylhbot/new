@@ -1,0 +1,10 @@
+{
+  "name": "stack-data",
+  "version": "0.6.3",
+  "license": "MIT",
+  "project_urls": [],
+  "home_page": "http://github.com/alexmojaki/stack_data",
+  "files": [
+    "stack_data-0.6.3.dist-info_LICENSE.txt"
+  ]
+}

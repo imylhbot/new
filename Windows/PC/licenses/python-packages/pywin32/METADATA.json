@@ -1,0 +1,33 @@
+{
+  "name": "pywin32",
+  "version": "312",
+  "license": "PSF",
+  "project_urls": [
+    "Homepage, https://github.com/mhammond/pywin32",
+    "Changes, https://github.com/mhammond/pywin32/blob/main/CHANGES.md",
+    "Docs, https://mhammond.github.io/pywin32/",
+    "Bugs, https://github.com/mhammond/pywin32/issues",
+    "Support Requests, https://github.com/mhammond/pywin32/discussions",
+    "Mailing List, https://mail.python.org/mailman/listinfo/python-win32"
+  ],
+  "home_page": null,
+  "files": [
+    "adodbapi_license.txt",
+    "pythonwin_License.txt",
+    "pythonwin_Scintilla-License.txt",
+    "pythonwin_pywin_idle_LICENSE.txt",
+    "pywin32-312.dist-info_licenses_adodbapi_license.txt",
+    "pywin32-312.dist-info_licenses_com_License.txt",
+    "pywin32-312.dist-info_licenses_com_win32comext_mapi_src_MAPIStubLibrary_LICENSE",
+    "pywin32-312.dist-info_licenses_isapi_README.txt",
+    "pywin32-312.dist-info_licenses_pythonwin_License.txt",
+    "pywin32-312.dist-info_licenses_pythonwin_Scintilla_License.txt",
+    "pywin32-312.dist-info_licenses_pythonwin_pywin_idle_LICENSE.txt",
+    "pywin32-312.dist-info_licenses_win32_License.txt",
+    "win32_License.txt",
+    "win32com_License.txt",
+    "win32comext_License.txt",
+    "win32comext_mapi_MAPIStubLibrary-License.txt",
+    "win32comext_mapi_NOTICE.md"
+  ]
+}

@@ -1,3 +1,5 @@
+> 2026-09-28 更新：以下为历史说明；当前交付与构建方式以根目录 README-中文.txt 和 Windows/README.md 为准。
+
 # SoulSign 二开说明
 
 本分支基于 MJorb / Seal，面向 SoulSign 品牌和手动 GitHub Release 工作流进行整理。

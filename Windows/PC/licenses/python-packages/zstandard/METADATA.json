@@ -1,0 +1,13 @@
+{
+  "name": "zstandard",
+  "version": "0.25.0",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Homepage, https://github.com/indygreg/python-zstandard",
+    "Documentation, https://python-zstandard.readthedocs.io/en/latest/"
+  ],
+  "home_page": null,
+  "files": [
+    "zstandard-0.25.0.dist-info_licenses_LICENSE"
+  ]
+}

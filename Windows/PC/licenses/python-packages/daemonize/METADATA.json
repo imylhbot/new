@@ -1,0 +1,10 @@
+{
+  "name": "daemonize",
+  "version": "2.5.0",
+  "license": "MIT",
+  "project_urls": [],
+  "home_page": "https://github.com/thesharp/daemonize",
+  "files": [
+    "daemonize-2.5.0.dist-info_LICENSE"
+  ]
+}

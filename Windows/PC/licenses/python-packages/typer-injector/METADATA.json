@@ -1,0 +1,14 @@
+{
+  "name": "typer-injector",
+  "version": "0.3.0",
+  "license": "MIT",
+  "project_urls": [
+    "Documentation, https://github.com/BenjyWiener/typer-injector#readme",
+    "Issues, https://github.com/BenjyWiener/typer-injector/issues",
+    "Source, https://github.com/BenjyWiener/typer-injector"
+  ],
+  "home_page": null,
+  "files": [
+    "typer_injector-0.3.0.dist-info_licenses_LICENSE.txt"
+  ]
+}

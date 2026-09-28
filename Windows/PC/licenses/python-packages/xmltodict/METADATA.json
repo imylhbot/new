@@ -1,0 +1,12 @@
+{
+  "name": "xmltodict",
+  "version": "1.0.4",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/martinblech/xmltodict"
+  ],
+  "home_page": null,
+  "files": [
+    "xmltodict-1.0.4.dist-info_licenses_LICENSE"
+  ]
+}

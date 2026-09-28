@@ -1,0 +1,10 @@
+{
+  "name": "coloredlogs",
+  "version": "15.0.1",
+  "license": "MIT",
+  "project_urls": [],
+  "home_page": "https://coloredlogs.readthedocs.io",
+  "files": [
+    "coloredlogs-15.0.1.dist-info_LICENSE.txt"
+  ]
+}

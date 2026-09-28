@@ -1,0 +1,13 @@
+{
+  "name": "lzfse",
+  "version": "0.4.2",
+  "license": "MIT",
+  "project_urls": [
+    "Bug Tracker, https://github.com/m1stadev/lzfse/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "lzfse-0.4.2.dist-info_COPYING",
+    "lzfse-0.4.2.dist-info_LICENSE.lzfse"
+  ]
+}

@@ -1,3 +1,5 @@
+> 2026-09-28 更新：以下为历史说明；当前交付与构建方式以根目录 README-中文.txt 和 Windows/README.md 为准。
+
 # SoulSign iOS 15 Build Fix
 
 本次修复针对 GitHub Actions Run `36327286362` 中的 Xcode `exit code 65`。

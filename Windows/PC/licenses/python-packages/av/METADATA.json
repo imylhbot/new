@@ -1,0 +1,16 @@
+{
+  "name": "av",
+  "version": "18.1.0",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Bug Tracker, https://github.com/PyAV-Org/PyAV/issues",
+    "Source Code, https://github.com/PyAV-Org/PyAV",
+    "homepage, https://pyav.basswood.io"
+  ],
+  "home_page": null,
+  "files": [
+    "av-18.1.0.dist-info_licenses_AUTHORS.py",
+    "av-18.1.0.dist-info_licenses_AUTHORS.rst",
+    "av-18.1.0.dist-info_licenses_LICENSE.txt"
+  ]
+}

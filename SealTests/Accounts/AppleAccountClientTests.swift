@@ -4,6 +4,22 @@ import Testing
 
 struct AppleAccountClientTests {
     @Test
+    func html503IsTemporaryAndDoesNotInvalidateCredentials() {
+        let error = NSError(domain: "AltSign.ALTServerError", code: 1,
+            userInfo: [NSLocalizedDescriptionKey: "Invalid server response: unparseable format (Payload: '503 Service Temporarily Unavailable Apple')"])
+        let failure = AppleAuthenticationFailure.make(stage: .signIn, error: error)
+        #expect(AppleServiceFailurePolicy.shouldRetryAuthentication(error, retries: 0, requestedVerification: false))
+        #expect(AppleServiceFailurePolicy.shouldRetryAuthentication(error, retries: 1, requestedVerification: false))
+        #expect(!AppleServiceFailurePolicy.shouldRetryAuthentication(error, retries: 2, requestedVerification: false))
+        #expect(!AppleServiceFailurePolicy.shouldRetryAuthentication(error, retries: 0, requestedVerification: true))
+        #expect(!AppleServiceFailurePolicy.shouldRetryAuthentication(NSError(domain: "credentials", code: 1), retries: 0, requestedVerification: false))
+        #expect(failure.code == "SEAL-NET-503")
+        #expect(AppleServiceFailurePolicy.isTransient(failure))
+        #expect(!AppleServiceFailurePolicy.shouldRequireReverification(failure))
+        #expect(!AppleServiceFailurePolicy.isServiceUnavailable(NSError(domain: "credentials", code: 503)))
+    }
+
+    @Test
     func signInFailurePreservesErrorCodeButRedactsEmail() {
         let error = NSError(
             domain: "com.apple.authentication", code: 3840,

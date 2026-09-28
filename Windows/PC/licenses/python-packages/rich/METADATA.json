@@ -1,0 +1,13 @@
+{
+  "name": "rich",
+  "version": "15.0.0",
+  "license": "MIT",
+  "project_urls": [
+    "Documentation, https://rich.readthedocs.io/en/latest/",
+    "Homepage, https://github.com/Textualize/rich"
+  ],
+  "home_page": null,
+  "files": [
+    "rich-15.0.0.dist-info_licenses_LICENSE"
+  ]
+}

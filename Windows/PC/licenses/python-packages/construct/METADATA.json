@@ -1,0 +1,14 @@
+{
+  "name": "construct",
+  "version": "2.10.70",
+  "license": "MIT",
+  "project_urls": [
+    "Source, https://github.com/construct/construct",
+    "Documentation, https://construct.readthedocs.io/en/latest/",
+    "Issues, https://github.com/construct/construct/issues"
+  ],
+  "home_page": "http://construct.readthedocs.org",
+  "files": [
+    "construct-2.10.70.dist-info_LICENSE"
+  ]
+}

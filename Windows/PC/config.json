@@ -1,0 +1,10 @@
+{
+  "name": "SoulSign PC",
+  "version": "1.3.1",
+  "repository": "https://github.com/imylhbot/new",
+  "repository_commit": "e107083475ea9d0c22842e76069a37b1a2283aa0",
+  "engine_repository": "https://github.com/pwnapplehat/iPASide",
+  "engine_commit": "7f13ecdb8f8e2737c0a5483ea551e970b9d4d5b7",
+  "zsign_version": "1.1.2",
+  "zsign_archive_sha256": "96b5bf7029a52c67cdb78b68b3666d8ff1e31e5c435535964be2a482afc09e5c"
+}

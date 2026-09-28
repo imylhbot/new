@@ -1,0 +1,14 @@
+{
+  "name": "termcolor",
+  "version": "3.3.0",
+  "license": "MIT",
+  "project_urls": [
+    "Changelog, https://github.com/termcolor/termcolor/releases",
+    "Homepage, https://github.com/termcolor/termcolor",
+    "Source, https://github.com/termcolor/termcolor"
+  ],
+  "home_page": null,
+  "files": [
+    "termcolor-3.3.0.dist-info_licenses_COPYING.txt"
+  ]
+}

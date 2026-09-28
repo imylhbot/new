@@ -1,0 +1,14 @@
+{
+  "name": "arrow",
+  "version": "1.4.0",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Documentation, https://arrow.readthedocs.io",
+    "Issues, https://github.com/arrow-py/arrow/issues",
+    "Source, https://github.com/arrow-py/arrow"
+  ],
+  "home_page": null,
+  "files": [
+    "arrow-1.4.0.dist-info_licenses_LICENSE"
+  ]
+}

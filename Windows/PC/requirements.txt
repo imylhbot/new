@@ -1,0 +1,10 @@
+--find-links ./wheels
+--only-binary=:all:
+# Direct dependencies are pinned; full build environment is recorded separately.
+pymobiledevice3==11.19.4
+Anisette==1.2.4
+srp==1.0.22
+cryptography==50.0.1
+certifi==2026.7.22
+zstandard==0.25.0
+tkinterdnd2==0.6.3

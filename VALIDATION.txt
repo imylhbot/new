@@ -1,0 +1,9 @@
+验证记录（2026-09-28）
+PASS：Windows 10 x64 / Python 3.12.14，13 项 PC 测试（DPAPI、账号选择、续签、脱敏、配对格式/UDID/设备匹配）。
+PASS：本机实际 PyInstaller 构建；便携 exe --self-test 运行库自检；--smoke-test GUI 启动退出码 0。
+PASS：zsign 1.1.2 校验及启动，含 Wintun/Unicorn/Anisette 所需资源。
+PASS：PowerShell 脚本语法；清理脚本在独立测试目录只移除指定 build 并保留哨兵文件。
+PASS：release.yml YAML 解析。
+未执行：GitHub 上传/远程发布（脚本交由用户运行）；真实 Apple ID/2FA、USB iPhone 安装/配对/续签。
+未执行：macOS/Xcode iOS 编译及 Swift 测试；503 分类和重试边界已添加 Swift 测试供 macOS 验证。
+本机依赖安装使用已验证的测试环境，不代表新 CI 环境 pip 下载必定可达。

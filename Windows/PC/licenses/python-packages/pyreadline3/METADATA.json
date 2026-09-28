@@ -1,0 +1,16 @@
+{
+  "name": "pyreadline3",
+  "version": "3.5.6",
+  "license": "BSD",
+  "project_urls": [
+    "Homepage, https://github.com/pyreadline3/pyreadline3",
+    "Documentation, https://github.com/pyreadline3/pyreadline3",
+    "Repository, https://github.com/pyreadline3/pyreadline3.git",
+    "Issues, https://github.com/pyreadline3/pyreadline3/issues",
+    "Changelog, https://github.com/pyreadline3/pyreadline3/blob/master/doc/ChangeLog"
+  ],
+  "home_page": null,
+  "files": [
+    "pyreadline3-3.5.6.dist-info_licenses_LICENSE.md"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "click",
+  "version": "8.5.0",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Changes, https://click.palletsprojects.com/page/changes/",
+    "Chat, https://discord.gg/pallets",
+    "Documentation, https://click.palletsprojects.com/",
+    "Donate, https://palletsprojects.com/donate",
+    "Source, https://github.com/pallets/click/"
+  ],
+  "home_page": null,
+  "files": [
+    "click-8.5.0.dist-info_licenses_LICENSE.txt"
+  ]
+}

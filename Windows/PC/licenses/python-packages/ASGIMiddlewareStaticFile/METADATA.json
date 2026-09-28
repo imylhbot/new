@@ -1,0 +1,15 @@
+{
+  "name": "ASGIMiddlewareStaticFile",
+  "version": "0.7.0",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "homepage, https://github.com/rexzhang/asgi-middleware-static-file",
+    "documentation, https://github.com/rexzhang/asgi-middleware-static-file/blob/main/README.md",
+    "repository, https://github.com/rexzhang/asgi-middleware-static-file",
+    "changelog, https://github.com/rexzhang/asgi-middleware-static-file/blob/main/README.md#history"
+  ],
+  "home_page": null,
+  "files": [
+    "asgimiddlewarestaticfile-0.7.0.dist-info_licenses_LICENSE"
+  ]
+}

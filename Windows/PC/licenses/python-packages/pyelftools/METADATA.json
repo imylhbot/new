@@ -1,0 +1,14 @@
+{
+  "name": "pyelftools",
+  "version": "0.33",
+  "license": "Public domain",
+  "project_urls": [
+    "Homepage, https://github.com/eliben/pyelftools",
+    "Repository, https://github.com/eliben/pyelftools.git",
+    "Issues, https://github.com/eliben/pyelftools/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "pyelftools-0.33.dist-info_licenses_LICENSE"
+  ]
+}

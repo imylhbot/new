@@ -1,0 +1,13 @@
+{
+  "name": "qh3",
+  "version": "1.9.4",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "documentation, https://qh3.readthedocs.io/",
+    "homepage, https://github.com/jawah/qh3"
+  ],
+  "home_page": "https://github.com/jawah/qh3",
+  "files": [
+    "qh3-1.9.4.dist-info_licenses_LICENSE"
+  ]
+}

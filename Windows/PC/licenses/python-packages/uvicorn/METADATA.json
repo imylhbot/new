@@ -1,0 +1,15 @@
+{
+  "name": "uvicorn",
+  "version": "0.54.0",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Changelog, https://uvicorn.dev/release-notes",
+    "Funding, https://github.com/sponsors/Kludex",
+    "Homepage, https://uvicorn.dev/",
+    "Source, https://github.com/Kludex/uvicorn"
+  ],
+  "home_page": null,
+  "files": [
+    "uvicorn-0.54.0.dist-info_licenses_LICENSE.md"
+  ]
+}

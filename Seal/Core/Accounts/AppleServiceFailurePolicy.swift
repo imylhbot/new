@@ -1,7 +1,37 @@
 ﻿import Foundation
 
 enum AppleServiceFailurePolicy {
+    /// AltSign wraps an HTML HTTP 503 body as ALTServerError(code: 1).
+    /// Do not infer an HTTP status from the numeric NSError code alone.
+    static func isServiceUnavailable(_ error: Error) -> Bool {
+        var current: NSError? = error as NSError
+        for _ in 0..<5 {
+            guard let item = current else { break }
+            let message = item.localizedDescription.lowercased()
+            if item.domain.contains("ALTServerError"),
+               message.contains("503 service temporarily unavailable") || message.contains("503 service unavailable") {
+                return true
+            }
+            current = item.userInfo[NSUnderlyingErrorKey] as? NSError
+        }
+        return false
+    }
+
+    static func shouldRetryAuthentication(_ error: Error, retries: Int, requestedVerification: Bool) -> Bool {
+        isServiceUnavailable(error) && !requestedVerification && retries < 2
+    }
+
+    static func serviceUnavailableFailure() -> ImportFailure {
+        ImportFailure(
+            title: "Apple 服务暂不可用",
+            reason: "认证服务返回 HTTP 503，未能完成登录。这不是密码错误，也不是配对文件错误。已保存账号不会因此失效。",
+            recovery: "稍后重试；若持续出现，请检查代理或更换网络。无需删除账号或配对文件。",
+            code: "SEAL-NET-503"
+        )
+    }
+
     static func isNetworkError(_ error: Error) -> Bool {
+        if isServiceUnavailable(error) { return true }
         if let urlError = error as? URLError {
             return networkCodes.contains(urlError.code)
         }

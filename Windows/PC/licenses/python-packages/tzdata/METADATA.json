@@ -1,0 +1,15 @@
+{
+  "name": "tzdata",
+  "version": "2026.4",
+  "license": "Apache-2.0",
+  "project_urls": [
+    "Bug Reports, https://github.com/python/tzdata/issues",
+    "Source, https://github.com/python/tzdata",
+    "Documentation, https://tzdata.python.org"
+  ],
+  "home_page": "https://github.com/python/tzdata",
+  "files": [
+    "tzdata-2026.4.dist-info_licenses_LICENSE",
+    "tzdata-2026.4.dist-info_licenses_licenses_LICENSE_APACHE"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "plumbum",
+  "version": "2.0.2",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/tomerfiliba/plumbum",
+    "Documentation, https://plumbum.readthedocs.io/",
+    "Bug Tracker, https://github.com/tomerfiliba/plumbum/issues",
+    "Changelog, https://plumbum.readthedocs.io/en/latest/changelog.html",
+    "Cheatsheet, https://plumbum.readthedocs.io/en/latest/quickref.html"
+  ],
+  "home_page": null,
+  "files": [
+    "plumbum-2.0.2.dist-info_licenses_LICENSE"
+  ]
+}

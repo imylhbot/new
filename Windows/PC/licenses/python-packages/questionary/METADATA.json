@@ -1,0 +1,14 @@
+{
+  "name": "questionary",
+  "version": "2.1.1",
+  "license": "MIT",
+  "project_urls": [
+    "Documentation, https://questionary.readthedocs.io/",
+    "Repository, https://github.com/tmbo/questionary"
+  ],
+  "home_page": null,
+  "files": [
+    "questionary-2.1.1.dist-info_LICENSE",
+    "questionary-2.1.1.dist-info_NOTICE"
+  ]
+}

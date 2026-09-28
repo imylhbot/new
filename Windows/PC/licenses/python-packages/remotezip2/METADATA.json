@@ -1,0 +1,13 @@
+{
+  "name": "remotezip2",
+  "version": "0.0.2",
+  "license": "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007",
+  "project_urls": [
+    "Homepage, https://github.com/doronz88/python-remotezip2",
+    "Bug Reports, https://github.com/doronz88/python-remotezip2/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "remotezip2-0.0.2.dist-info_LICENSE"
+  ]
+}

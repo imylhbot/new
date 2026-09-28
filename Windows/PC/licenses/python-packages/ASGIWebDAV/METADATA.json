@@ -1,0 +1,15 @@
+{
+  "name": "ASGIWebDAV",
+  "version": "2.0.1",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "homepage, https://github.com/rexzhang/asgi-webdav",
+    "documentation, https://rexzhang.github.io/asgi-webdav/",
+    "repository, https://github.com/rexzhang/asgi-webdav",
+    "changelog, https://github.com/rexzhang/asgi-webdav/blob/main/docs/changelog.en.md"
+  ],
+  "home_page": null,
+  "files": [
+    "asgiwebdav-2.0.1.dist-info_licenses_LICENSE"
+  ]
+}

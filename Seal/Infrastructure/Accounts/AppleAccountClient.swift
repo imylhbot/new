@@ -8,6 +8,9 @@ enum AppleAuthenticationStage: Sendable {
 
 enum AppleAuthenticationFailure {
     static func make(stage: AppleAuthenticationStage, error: Error) -> ImportFailure {
+        if AppleServiceFailurePolicy.isServiceUnavailable(error) {
+            return AppleServiceFailurePolicy.serviceUnavailableFailure()
+        }
         if AppleServiceFailurePolicy.isNetworkError(error) {
             return AppleServiceFailurePolicy.networkFailure(
                 title: "无法连接 Apple",
@@ -391,12 +394,32 @@ final class AppleAccountClient {
         anisetteData: ALTAnisetteData,
         verificationCode: @escaping @MainActor @Sendable () async -> String?
     ) async throws -> LegacyBox<AuthObjects> {
-        try await Self.authenticateWithAPI(
-            email: email,
-            password: password,
-            anisetteData: anisetteData,
-            verificationCode: verificationCode
-        )
+        // Reuse the same local Anisette identity. Never replay a submitted 2FA code.
+        let attemptState = AuthenticationAttemptState()
+        var retries = 0
+        while true {
+            try Task.checkCancellation()
+            do {
+                return try await Self.authenticateWithAPI(
+                    email: email,
+                    password: password,
+                    anisetteData: anisetteData,
+                    verificationCode: {
+                        attemptState.requestedVerification = true
+                        return await verificationCode()
+                    }
+                )
+            } catch {
+                guard AppleServiceFailurePolicy.isServiceUnavailable(error) else { throw error }
+                guard AppleServiceFailurePolicy.shouldRetryAuthentication(
+                    error, retries: retries, requestedVerification: attemptState.requestedVerification
+                ) else {
+                    throw AppleServiceFailurePolicy.serviceUnavailableFailure()
+                }
+                retries += 1
+                try await Task.sleep(nanoseconds: UInt64(retries * 2) * 1_000_000_000)
+            }
+        }
     }
 
     private nonisolated static func authenticateWithAPI(
@@ -566,4 +589,9 @@ private final class LegacyCallbackBox<Value: Sendable>: @unchecked Sendable {
         continuation = nil
         return pending
     }
+}
+
+@MainActor
+private final class AuthenticationAttemptState {
+    var requestedVerification = false
 }

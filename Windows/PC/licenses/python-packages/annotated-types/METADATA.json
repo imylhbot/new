@@ -1,0 +1,14 @@
+{
+  "name": "annotated-types",
+  "version": "0.8.0",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/annotated-types/annotated-types",
+    "Source, https://github.com/annotated-types/annotated-types",
+    "Changelog, https://github.com/annotated-types/annotated-types/releases"
+  ],
+  "home_page": null,
+  "files": [
+    "annotated_types-0.8.0.dist-info_licenses_LICENSE"
+  ]
+}

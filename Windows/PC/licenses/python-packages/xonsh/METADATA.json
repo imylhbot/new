@@ -1,0 +1,18 @@
+{
+  "name": "xonsh",
+  "version": "0.24.2",
+  "license": "BSD 2-Clause License",
+  "project_urls": [
+    "Homepage, https://xon.sh",
+    "documentation, https://xon.sh/contents.html",
+    "repository, https://github.com/xonsh/xonsh",
+    "changelog, https://github.com/xonsh/xonsh/blob/main/CHANGELOG.md",
+    "Issue tracker, https://github.com/xonsh/xonsh/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "xonsh-0.24.2.dist-info_licenses_AUTHORS.rst",
+    "xonsh-0.24.2.dist-info_licenses_LICENSE",
+    "xonsh_webconfig_js_LICENSE-bootstrap"
+  ]
+}

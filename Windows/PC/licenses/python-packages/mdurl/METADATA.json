@@ -1,0 +1,12 @@
+{
+  "name": "mdurl",
+  "version": "0.1.2",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Homepage, https://github.com/executablebooks/mdurl"
+  ],
+  "home_page": null,
+  "files": [
+    "mdurl-0.1.2.dist-info_LICENSE"
+  ]
+}

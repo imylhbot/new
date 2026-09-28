@@ -1,0 +1,17 @@
+{
+  "name": "typer",
+  "version": "0.27.2",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/fastapi/typer",
+    "Documentation, https://typer.tiangolo.com",
+    "Repository, https://github.com/fastapi/typer",
+    "Issues, https://github.com/fastapi/typer/issues",
+    "Changelog, https://typer.tiangolo.com/release-notes/"
+  ],
+  "home_page": null,
+  "files": [
+    "typer-0.27.2.dist-info_licenses_LICENSE",
+    "typer__click_LICENSE.txt"
+  ]
+}

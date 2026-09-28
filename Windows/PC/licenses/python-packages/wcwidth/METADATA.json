@@ -1,0 +1,12 @@
+{
+  "name": "wcwidth",
+  "version": "0.9.1",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Homepage, https://github.com/jquast/wcwidth"
+  ],
+  "home_page": null,
+  "files": [
+    "wcwidth-0.9.1.dist-info_licenses_LICENSE"
+  ]
+}

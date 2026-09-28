@@ -1,0 +1,10 @@
+{
+  "name": "parso",
+  "version": "0.8.7",
+  "license": "MIT",
+  "project_urls": [],
+  "home_page": "https://github.com/davidhalter/parso",
+  "files": [
+    "parso-0.8.7.dist-info_LICENSE.txt"
+  ]
+}

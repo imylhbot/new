@@ -1,0 +1,10 @@
+{
+  "name": "asn1",
+  "version": "2.8.0",
+  "license": "BSD",
+  "project_urls": [],
+  "home_page": "https://github.com/andrivet/python-asn1",
+  "files": [
+    "asn1-2.8.0.dist-info_LICENSE"
+  ]
+}

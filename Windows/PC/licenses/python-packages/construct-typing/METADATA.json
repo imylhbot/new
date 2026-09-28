@@ -1,0 +1,13 @@
+{
+  "name": "construct-typing",
+  "version": "0.8.1",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/timrid/construct-typing",
+    "Bug Reports, https://github.com/timrid/construct-typing/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "construct_typing-0.8.1.dist-info_licenses_LICENSE"
+  ]
+}

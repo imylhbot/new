@@ -1,0 +1,11 @@
+{
+  "name": "developer_disk_image",
+  "version": "0.3.0",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Homepage, https://github.com/doronz88/DeveloperDiskImage",
+    "Bug Reports, https://github.com/doronz88/DeveloperDiskImage/issues"
+  ],
+  "home_page": null,
+  "files": []
+}

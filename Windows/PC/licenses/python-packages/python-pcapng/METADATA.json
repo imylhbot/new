@@ -1,0 +1,10 @@
+{
+  "name": "python-pcapng",
+  "version": "2.1.1",
+  "license": "Apache-2.0",
+  "project_urls": [],
+  "home_page": "https://github.com/rshk/python-pcapng",
+  "files": [
+    "python_pcapng-2.1.1.dist-info_LICENSE"
+  ]
+}

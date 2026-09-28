@@ -1,0 +1,10 @@
+{
+  "name": "defusedxml",
+  "version": "0.7.1",
+  "license": "PSFL",
+  "project_urls": [],
+  "home_page": "https://github.com/tiran/defusedxml",
+  "files": [
+    "defusedxml-0.7.1.dist-info_LICENSE"
+  ]
+}

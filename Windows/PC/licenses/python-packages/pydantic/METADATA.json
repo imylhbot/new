@@ -1,0 +1,16 @@
+{
+  "name": "pydantic",
+  "version": "2.13.5",
+  "license": "MIT",
+  "project_urls": [
+    "Homepage, https://github.com/pydantic/pydantic",
+    "Documentation, https://docs.pydantic.dev",
+    "Funding, https://github.com/sponsors/samuelcolvin",
+    "Source, https://github.com/pydantic/pydantic",
+    "Changelog, https://docs.pydantic.dev/latest/changelog/"
+  ],
+  "home_page": null,
+  "files": [
+    "pydantic-2.13.5.dist-info_licenses_LICENSE"
+  ]
+}

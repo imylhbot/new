@@ -1,0 +1,17 @@
+{
+  "name": "ipython",
+  "version": "9.17.1",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Homepage, https://ipython.org",
+    "Documentation, https://ipython.readthedocs.io/",
+    "Funding, https://jupyter.org/about#donate",
+    "Source, https://github.com/ipython/ipython",
+    "Tracker, https://github.com/ipython/ipython/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "ipython-9.17.1.dist-info_licenses_COPYING.rst",
+    "ipython-9.17.1.dist-info_licenses_LICENSE"
+  ]
+}

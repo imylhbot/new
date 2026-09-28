@@ -1,0 +1,14 @@
+{
+  "name": "prompt_toolkit",
+  "version": "3.0.53",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Homepage, https://github.com/prompt-toolkit/python-prompt-toolkit",
+    "Documentation, https://python-prompt-toolkit.readthedocs.io/en/stable/"
+  ],
+  "home_page": null,
+  "files": [
+    "prompt_toolkit-3.0.53.dist-info_licenses_AUTHORS.rst",
+    "prompt_toolkit-3.0.53.dist-info_licenses_LICENSE"
+  ]
+}

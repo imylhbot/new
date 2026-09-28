@@ -1,0 +1,14 @@
+{
+  "name": "jedi",
+  "version": "0.20.0",
+  "license": "MIT",
+  "project_urls": [
+    "Documentation, https://jedi.readthedocs.io/en/latest/"
+  ],
+  "home_page": "https://github.com/davidhalter/jedi",
+  "files": [
+    "jedi-0.20.0.dist-info_LICENSE.txt",
+    "jedi_third_party_django-stubs_LICENSE.txt",
+    "jedi_third_party_typeshed_LICENSE"
+  ]
+}

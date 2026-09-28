@@ -1,0 +1,14 @@
+{
+  "name": "markdown-it-py",
+  "version": "4.2.0",
+  "license": "See included license files / upstream project.",
+  "project_urls": [
+    "Documentation, https://markdown-it-py.readthedocs.io",
+    "Homepage, https://github.com/executablebooks/markdown-it-py"
+  ],
+  "home_page": null,
+  "files": [
+    "markdown_it_py-4.2.0.dist-info_licenses_LICENSE",
+    "markdown_it_py-4.2.0.dist-info_licenses_LICENSE.markdown-it"
+  ]
+}

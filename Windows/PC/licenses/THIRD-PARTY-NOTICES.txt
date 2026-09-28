@@ -1,0 +1,21 @@
+SoulSign PC 1.3.0
+
+Desktop additions: GNU AGPL-3.0, see ../LICENSE and ../src.
+Original SoulSign icon: copied from imylhbot/new, repository license AGPL-3.0.
+iPASide Python engine: MIT; see iPASide-MIT.txt.
+zsign 1.1.2: MIT; see zsign-LICENSE.txt. Upstream release archive verified with
+zsign-SHA256SUMS.txt. Source for zsign and bundled zlib/minizip components is under
+../third_party/zsign/src; their copyright notices remain in the source headers.
+zsign upstream: https://github.com/zhlynn/zsign/tree/v1.1.2
+
+Python: Python-LICENSE.txt.
+Python packages and binary dependencies: python-packages/INDEX.json and per-package
+directories include available upstream license/copyright files and project URLs.
+The portable folder contains the dependencies used by PyInstaller; no Apple iTunes
+installer, Apple account, signing identity, or device pairing record is bundled.
+
+hexdump 3.3: Public Domain (upstream metadata). Pure-Python wheel built from the
+unmodified PyPI source; included source at ../third_party/hexdump.
+
+Anisette provisioning libraries are downloaded on first login by the upstream
+engine. They are not redistributed in this ZIP.

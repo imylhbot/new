@@ -1,0 +1,12 @@
+{
+  "name": "python-dotenv",
+  "version": "1.2.3",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Source, https://github.com/theskumar/python-dotenv"
+  ],
+  "home_page": null,
+  "files": [
+    "python_dotenv-1.2.3.dist-info_licenses_LICENSE"
+  ]
+}

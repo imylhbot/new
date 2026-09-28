@@ -1,0 +1,16 @@
+{
+  "name": "starlette",
+  "version": "1.7.0",
+  "license": "BSD-3-Clause",
+  "project_urls": [
+    "Homepage, https://github.com/Kludex/starlette",
+    "Documentation, https://starlette.dev/",
+    "Changelog, https://starlette.dev/release-notes/",
+    "Funding, https://github.com/sponsors/Kludex",
+    "Source, https://github.com/Kludex/starlette"
+  ],
+  "home_page": null,
+  "files": [
+    "starlette-1.7.0.dist-info_licenses_LICENSE.md"
+  ]
+}

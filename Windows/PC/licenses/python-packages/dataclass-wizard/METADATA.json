@@ -1,0 +1,17 @@
+{
+  "name": "dataclass-wizard",
+  "version": "0.39.1",
+  "license": "Apache Software License 2.0\n\nCopyright (c) 2021, Ritvik Nag\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n",
+  "project_urls": [
+    "Discussions, https://github.com/rnag/dataclass-wizard/discussions",
+    "Changelog, https://dcw.ritviknag.com/en/latest/history.html",
+    "Source, https://github.com/rnag/dataclass-wizard",
+    "Download, https://pypi.org/project/dataclass-wizard",
+    "Documentation, https://dcw.ritviknag.com",
+    "Bug Tracker, https://github.com/rnag/dataclass-wizard/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "dataclass_wizard-0.39.1.dist-info_licenses_LICENSE"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "chardet",
+  "version": "7.6.0",
+  "license": "0BSD",
+  "project_urls": [
+    "Homepage, https://github.com/chardet/chardet",
+    "Repository, https://github.com/chardet/chardet",
+    "Bug Tracker, https://github.com/chardet/chardet/issues",
+    "Documentation, https://chardet.readthedocs.io",
+    "Changelog, https://chardet.readthedocs.io/en/latest/changelog.html"
+  ],
+  "home_page": null,
+  "files": [
+    "chardet-7.6.0.dist-info_licenses_LICENSE"
+  ]
+}

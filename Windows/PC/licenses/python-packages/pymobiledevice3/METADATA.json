@@ -1,0 +1,13 @@
+{
+  "name": "pymobiledevice3",
+  "version": "11.19.4",
+  "license": "GPL-3.0-or-later",
+  "project_urls": [
+    "Homepage, https://github.com/doronz88/pymobiledevice3",
+    "Bug Reports, https://github.com/doronz88/pymobiledevice3/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "pymobiledevice3-11.19.4.dist-info_licenses_LICENSE"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "pmd-pytcp",
+  "version": "0.3.7",
+  "license": "GPL-3.0-or-later",
+  "project_urls": [
+    "Homepage, https://github.com/ccie18643/PyTCP",
+    "Bug Tracker, https://github.com/ccie18643/PyTCP/issues"
+  ],
+  "home_page": null,
+  "files": [
+    "pmd_pytcp-0.3.7.dist-info_licenses_LICENSE"
+  ]
+}
