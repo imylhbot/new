@@ -220,6 +220,8 @@ struct AnisetteV3Client: AnisetteEnvironmentManaging {
             }
             UserDefaults.standard.set(true, forKey: Self.localSucceededKey)
             return data
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             Self.logger.error("认证时本地 Anisette 生成失败，拒绝降级远程以避免 machineID 漂移：\(String(describing: error), privacy: .public)")
             throw AnisetteV3Error.localGenerationFailed(error.localizedDescription)

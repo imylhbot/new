@@ -28,7 +28,7 @@ enum AppleAuthenticationFailure {
             if let underlying = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
                 parts.append("嵌套：\(underlying.domain)/\(underlying.code) \(underlying.localizedDescription)")
             }
-            let detail = parts.joined(separator: "\n")
+            let detail = LogPrivacyRedactor.redact(parts.joined(separator: "\n"))
             return ImportFailure(
                 title: "无法添加账号",
                 reason: "Apple ID 验证失败。\n\(detail)",
@@ -73,20 +73,6 @@ final class AppleAccountClient {
                 verificationCode: verificationCode
             )
         }
-    }
-
-    /// 判断认证错误是否值得"清本地指纹、换远程 Anisette"后自动重试一次。
-    /// 覆盖：Apple 判 anisette 无效、认证端点返回 HTML 导致 plist 解析失败(NSCocoa 3840)、坏服务器响应。
-    private nonisolated static func shouldRetryWithRemoteAnisette(_ error: Error) -> Bool {
-        if case ALTAppleAPIError.invalidAnisetteData = error { return true }
-        let ns = error as NSError
-        if ns.domain == NSCocoaErrorDomain, ns.code == 3840 { return true }
-        if let urlError = error as? URLError, urlError.code == .badServerResponse { return true }
-        // AltSign invalidResponse（Apple 返回 503/HTML 等非 plist 响应）也换远程 Anisette 重试
-        if ns.domain == "AltSign.ALTServerError", ns.code == 1 { return true }
-        if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? NSError,
-           underlying.domain == NSCocoaErrorDomain, underlying.code == 3840 { return true }
-        return false
     }
 
     /// 给异步操作加超时，超时后抛出超时错误。
@@ -205,15 +191,15 @@ final class AppleAccountClient {
                 code: "SEAL-AUTH-102a"
             )
         } catch ALTAppleAPIError.invalidAnisetteData {
-            throw ALTAppleAPIError(.invalidAnisetteData)
+            throw ImportFailure(
+                title: "Apple 设备环境验证失败",
+                reason: "Apple 拒绝了本次 Anisette 设备环境数据。账号尚未完成登录；这不是 USB 配对文件验证失败。",
+                recovery: "核对系统时间和网络后重试，并查看运行日志中的错误码",
+                code: "SEAL-AUTH-107i"
+            )
         } catch let failure as ImportFailure {
             throw failure
         } catch {
-            // 认证端点返回 HTML/空响应导致 plist 解析失败(3840)、或坏服务器响应：
-            // 这类错误可通过清除本地指纹、换远程 Anisette 通道恢复，原样上抛交给 authenticate 自动重试一次
-            if Self.shouldRetryWithRemoteAnisette(error) {
-                throw error
-            }
             // Apple 拒绝认证握手，通常与 Anisette 设备环境数据无效有关，
             // 而不是用户网络问题，必须与“验证失败/网络”区分开。
             if let apiError = error as? ALTAppleAPIError,
@@ -496,7 +482,7 @@ final class AppleAccountClient {
             }
             return ImportFailure(
                 title: "无法获取设备环境",
-                reason: detail.isEmpty ? "Anisette 服务暂时不可用" : detail,
+                reason: detail.isEmpty ? "Anisette 服务暂时不可用" : LogPrivacyRedactor.redact(detail),
                 recovery: "重试",
                 code: code
             )
@@ -521,7 +507,7 @@ final class AppleAccountClient {
         if let underlying = nsError.userInfo[NSUnderlyingErrorKey] as? NSError {
             detailParts.append("嵌套：\(underlying.domain)/\(underlying.code) \(underlying.localizedDescription)")
         }
-        let detail = detailParts.joined(separator: "\n")
+        let detail = LogPrivacyRedactor.redact(detailParts.joined(separator: "\n"))
         let baseReason = isVerificationFailure ? "验证码无效" : "Apple ID 验证失败"
         return ImportFailure(
             title: "无法添加账号",

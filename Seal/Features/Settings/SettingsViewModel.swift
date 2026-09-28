@@ -1180,9 +1180,9 @@ final class SettingsViewModel: ObservableObject {
             let failure = AppleServiceFailurePolicy.isNetworkError(error)
                 ? AppleServiceFailurePolicy.networkFailure(underlying: error)
                 : Self.failure(
-                    title: "无法添加账号",
-                    reason: "Apple ID 验证失败",
-                    recovery: "重试",
+                    title: "账号添加未完成",
+                    reason: "登录流程返回了未分类错误（\(LogPrivacyRedactor.redact((error as NSError).domain)) / \((error as NSError).code)）。请查看运行日志；不能仅据此认定密码错误。",
+                    recovery: "记录错误码后重试",
                     code: "SEAL-AUTH-102"
                 )
             alertFailure = failure
@@ -1232,6 +1232,30 @@ final class SettingsViewModel: ObservableObject {
     }
 
     private func persistAuthenticatedAccount(
+        _ authenticated: AuthenticatedAppleAccount,
+        team: AppleTeamRecord,
+        replacing existingAccount: AppleAccountRecord?
+    ) async throws -> Bool {
+        do {
+            return try await persistAuthenticatedAccountUnchecked(
+                authenticated, team: team, replacing: existingAccount
+            )
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch let failure as ImportFailure {
+            throw failure
+        } catch {
+            let underlying = error as NSError
+            throw Self.failure(
+                title: "Apple 已认证，账号保存失败",
+                reason: "Apple 已返回账号与开发团队，但保存本机钥匙串或账号记录失败（\(LogPrivacyRedactor.redact(underlying.domain)) / \(underlying.code)）。",
+                recovery: "保留错误码并检查安装包签名和钥匙串权限后重试",
+                code: "SEAL-AUTH-STORE-001"
+            )
+        }
+    }
+
+    private func persistAuthenticatedAccountUnchecked(
         _ authenticated: AuthenticatedAppleAccount,
         team: AppleTeamRecord,
         replacing existingAccount: AppleAccountRecord?

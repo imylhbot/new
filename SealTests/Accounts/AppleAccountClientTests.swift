@@ -4,6 +4,18 @@ import Testing
 
 struct AppleAccountClientTests {
     @Test
+    func signInFailurePreservesErrorCodeButRedactsEmail() {
+        let error = NSError(
+            domain: "com.apple.authentication", code: 3840,
+            userInfo: [NSLocalizedDescriptionKey: "account@example.com invalid response"]
+        )
+        let failure = AppleAuthenticationFailure.make(stage: .signIn, error: error)
+        #expect(failure.code == "SEAL-AUTH-107a")
+        #expect(failure.reason.contains("3840"))
+        #expect(failure.reason.contains("account@example.com") == false)
+    }
+
+    @Test
     func masksEmailWithoutPersistingTheFullAddress() {
         #expect(AppleAccountClient.mask("seal.user@icloud.com") == "sea***er@icloud.com")
         #expect(AppleAccountClient.mask("developer@icloud.com") == "dev***er@icloud.com")
@@ -26,7 +38,7 @@ struct AppleAccountClientTests {
             error: error
         )
 
-        #expect(failure.code == "SEAL-AUTH-105")
+        #expect(failure.code == "SEAL-AUTH-105f")
         #expect(failure.reason.contains("-20101") == false)
         #expect(failure.reason.contains("Developer services are unavailable") == false)
         #expect(failure.reason.contains("开发团队"))
